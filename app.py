@@ -1,8 +1,10 @@
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title="AI Resume Optimizer")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
@@ -25,25 +27,35 @@ def build_demo_result(jd_text: str, resume_text: str):
     }
 
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "result": None})
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={
+            "request": request,
+            "result": None,
+            "jd_text": "",
+            "resume_text": "",
+        },
+    )
 
 
 @app.post("/analyze", response_class=HTMLResponse)
 def analyze(request: Request, jd_text: str = Form(...), resume_text: str = Form(...)):
     result = build_demo_result(jd_text, resume_text)
     return templates.TemplateResponse(
-        "index.html",
-        {
+        request=request,
+        name="index.html",
+        context={
             "request": request,
             "result": result,
             "jd_text": jd_text,
             "resume_text": resume_text,
         },
     )
-
-
-@app.get("/health")
-def health():
-    return {"status": "ok"}
