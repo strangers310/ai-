@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Resume Optimizer</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Resume Optimizer</h1>
+            <p>Paste a job description and your resume to get keyword analysis and rewrite suggestions.</p>
+        </header>
+
+        <section class="card">
+            <form action="/analyze" method="post">
+                <label for="jd_text">Job Description</label>
+                <textarea id="jd_text" name="jd_text" rows="10" placeholder="Paste the JD here...">{{ jd_text if jd_text else '' }}</textarea>
+
+                <label for="resume_text">Resume Content</label>
+                <textarea id="resume_text" name="resume_text" rows="10" placeholder="Paste your resume here...">{{ resume_text if resume_text else '' }}</textarea>
+
+                <button type="submit">Analyze Resume</button>
+            </form>
+        </section>
+
+        {% if result %}
+        <section class="card result-card">
+            <h2>Analysis Summary</h2>
+            <p>{{ result.summary }}</p>
+
+            <div class="grid">
+                <div>
+                    <h3>Matched Keywords</h3>
+                    <ul>
+                        {% for item in result.matched %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div>
+                    <h3>Missing Keywords</h3>
+                    <ul>
+                        {% for item in result.missing %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Suggested Resume Bullets</h3>
+            <ul>
+                {% for item in result.rewrite %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endif %}
+    </div>
+</body>
+</html>
