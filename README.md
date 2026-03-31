@@ -133,6 +133,14 @@ http://127.0.0.1:8000
   - Built backend services using Python and integrated REST APIs for small-scale applications
   - Developed web prototypes with HTML/CSS/JavaScript for user testing and feedback
   - Experimented with LLM prompt engineering to optimize model outputs for specific use cases
+    
+## Screenshots
+
+### Input Page
+![Input Page](assets/home.png)
+
+### Analysis Result
+![Analysis Result](assets/result.png)
 
 ## Project Highlights
 
